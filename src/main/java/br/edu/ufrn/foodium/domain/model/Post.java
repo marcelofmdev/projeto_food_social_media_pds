@@ -1,4 +1,4 @@
-package br.edu.ufrn.foodium.post;
+package br.edu.ufrn.foodium.domain.model;
 
 import java.time.LocalDate;
 

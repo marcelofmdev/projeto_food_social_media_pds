@@ -1,5 +1,6 @@
-package br.edu.ufrn.foodium.post;
+package br.edu.ufrn.foodium.configuration;
 
+import br.edu.ufrn.foodium.domain.model.Post;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

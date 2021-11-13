@@ -1,5 +1,7 @@
-package br.edu.ufrn.foodium.post;
+package br.edu.ufrn.foodium.controller;
 
+import br.edu.ufrn.foodium.domain.model.Post;
+import br.edu.ufrn.foodium.domain.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
