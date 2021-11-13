@@ -1,4 +1,4 @@
-package br.edu.ufrn.projeto_food_social_media_pds.post;
+package br.edu.ufrn.foodium.post;
 
 import java.time.LocalDate;
 

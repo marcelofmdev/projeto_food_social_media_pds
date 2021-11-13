@@ -1,9 +1,8 @@
-package br.edu.ufrn.projeto_food_social_media_pds.post;
+package br.edu.ufrn.foodium.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
