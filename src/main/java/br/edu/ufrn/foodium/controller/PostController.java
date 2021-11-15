@@ -1,40 +1,40 @@
 package br.edu.ufrn.foodium.controller;
 
 import br.edu.ufrn.foodium.domain.model.Post;
+import br.edu.ufrn.foodium.domain.model.User;
 import br.edu.ufrn.foodium.domain.service.PostService;
+import br.edu.ufrn.foodium.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/post")
 public class PostController {
 
-    private final PostService postService;
-
     @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+    private PostService postService;
 
     @GetMapping
-    public List<Post> getPosts(@RequestParam(required = false) Long userId) {
-        if(userId == null) {
-            return postService.getPosts();
-        }
+    public List<Post> getPost() {
+        return postService.getPosts();
+    }
 
-        return postService.getPostsFromUser(userId);
+    @GetMapping("/{id}")
+    public Post getPost(@PathVariable Long id) {
+        return postService.getPost(id);
     }
 
     @PostMapping
-    public void registerNewPost(@RequestBody Post post) {
-        postService.addNewPost(post);
+    public Post createPost(@RequestBody Post post) {
+        post.setDate(LocalDate.now());
+        return postService.savePost(post);
     }
 
-    @DeleteMapping(path = "{postId}")
-    public void deletePost(@PathVariable("postId") Long id) {
-        postService.deletePost(id);
+    @DeleteMapping(path = "/{id}")
+    public void deletePost(@PathVariable Long id) {
+        postService.removePost(id);
     }
-
 }
