@@ -22,7 +22,7 @@ public class Tag {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
-    private Long id;
+    private Long tag_id;
 
     private String name;
 
