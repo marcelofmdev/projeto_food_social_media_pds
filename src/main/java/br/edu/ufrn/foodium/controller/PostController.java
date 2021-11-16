@@ -1,9 +1,8 @@
 package br.edu.ufrn.foodium.controller;
 
+import br.edu.ufrn.foodium.controller.dto.PostDto;
 import br.edu.ufrn.foodium.domain.model.Post;
-import br.edu.ufrn.foodium.domain.model.User;
 import br.edu.ufrn.foodium.domain.service.PostService;
-import br.edu.ufrn.foodium.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +27,7 @@ public class PostController {
     }
 
     @PostMapping
-    public Post createPost(@RequestBody Post post) {
-        post.setDate(LocalDate.now());
+    public Post createPost(@RequestBody PostDto post) {
         return postService.savePost(post);
     }
 
