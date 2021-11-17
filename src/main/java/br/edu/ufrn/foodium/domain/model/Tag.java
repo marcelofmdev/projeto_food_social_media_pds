@@ -3,6 +3,7 @@ package br.edu.ufrn.foodium.domain.model;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,8 +35,7 @@ public class Tag {
     )
     public Set<User> userTag = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "tagPost")
-    private Set<Post> tags = new HashSet<>();
-
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "tag_posts")
+//    private Set<Post> posts = new HashSet<>();
 }

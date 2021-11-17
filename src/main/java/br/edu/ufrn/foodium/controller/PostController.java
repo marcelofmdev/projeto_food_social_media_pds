@@ -1,6 +1,7 @@
 package br.edu.ufrn.foodium.controller;
 
 import br.edu.ufrn.foodium.controller.dto.PostDto;
+import br.edu.ufrn.foodium.controller.dto.PutPostDto;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class PostController {
     @PostMapping
     public Post createPost(@RequestBody PostDto post) {
         return postService.savePost(post);
+    }
+
+    @PutMapping
+    public Post putPost(@RequestBody PutPostDto post) {
+        return postService.putPost(post);
     }
 
     @DeleteMapping(path = "/{id}")
