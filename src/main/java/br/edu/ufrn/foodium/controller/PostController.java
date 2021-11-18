@@ -1,17 +1,16 @@
 package br.edu.ufrn.foodium.controller;
 
-import br.edu.ufrn.foodium.controller.dto.PostDto;
-import br.edu.ufrn.foodium.controller.dto.PutPostDto;
+import br.edu.ufrn.foodium.controller.dto.post.CreatePostDto;
+import br.edu.ufrn.foodium.controller.dto.post.UpdatePostDto;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/post")
+@RequestMapping(path = "api/post")
 public class PostController {
 
     @Autowired
@@ -28,13 +27,13 @@ public class PostController {
     }
 
     @PostMapping
-    public Post createPost(@RequestBody PostDto post) {
+    public Post createPost(@RequestBody CreatePostDto post) {
         return postService.savePost(post);
     }
 
     @PutMapping
-    public Post putPost(@RequestBody PutPostDto post) {
-        return postService.putPost(post);
+    public Post putPost(@RequestBody UpdatePostDto post) {
+        return postService.updatePost(post);
     }
 
     @DeleteMapping(path = "/{id}")

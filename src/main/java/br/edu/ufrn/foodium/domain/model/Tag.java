@@ -1,41 +1,61 @@
 package br.edu.ufrn.foodium.domain.model;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.Hibernate;
 
-import java.util.HashSet;
-import java.util.Set;
-
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tag", schema = "public")
-public class Tag {
+public class Tag extends Auditable {
 
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
-    private Long tag_id;
+    private Long id;
 
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_tag",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    public Set<User> userTag = new HashSet<>();
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "tag_posts")
-//    private Set<Post> posts = new HashSet<>();
+    @JsonIgnore
+    @Override
+    public boolean isNew() {
+        return this.id != null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        Tag tag = (Tag) o;
+        return id != null && Objects.equals(id, tag.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
