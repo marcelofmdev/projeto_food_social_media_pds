@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UpdateUserDto {
-    @NotNull(message = "Id do usuário é obrigatório")
+    @NotNull(message = "O id do usuário é obrigatório")
     private Long id;
 
     @NotEmpty(message = "Informe um nome")

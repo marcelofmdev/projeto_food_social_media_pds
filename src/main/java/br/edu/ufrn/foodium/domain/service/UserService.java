@@ -43,7 +43,7 @@ public class UserService {
             newUser.setTags(tags);
         }
 
-        return userJpaRepository.saveAndFlush(newUser);
+        return userJpaRepository.save(newUser);
     }
 
     public User updateUser(UpdateUserDto userDto) {

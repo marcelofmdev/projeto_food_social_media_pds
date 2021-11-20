@@ -32,7 +32,7 @@ public class PostController {
     }
 
     @PutMapping
-    public Post putPost(@RequestBody UpdatePostDto post) {
+    public Post updatePost(@RequestBody UpdatePostDto post) {
         return postService.updatePost(post);
     }
 

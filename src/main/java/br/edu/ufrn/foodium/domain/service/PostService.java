@@ -32,18 +32,29 @@ public class PostService {
     }
 
     public Post getPost(Long id) {
-        return postJpaRepository.findById(id).orElse(null);
+        Post post = postJpaRepository.findById(id).orElse(null);
+
+        if (post == null) {
+            throw new BusinessException("Publicação não encontrada com id " + id, HttpStatus.NOT_FOUND.value());
+        }
+
+        return post;
     }
 
-    public Post savePost(CreatePostDto post) {
-        User userSearched = userJpaRepository.findById(post.getUserId()).orElse(null);
-        if(userSearched == null) {
-            throw new BusinessException("Usuário não encontrado com o id " + post.getUserId(), HttpStatus.NOT_FOUND.value());
-        }
-        Post postToBeSaved = new Post(post.getImageUrl(), post.getContent(), userSearched);
-        List<Tag> tags = tagJpaRepository.findAllById(post.getTagsIds());
+    public Post savePost(CreatePostDto postDto) {
+        User userSearched = userJpaRepository.findById(postDto.getUserId()).orElse(null);
 
-        postToBeSaved.tags.addAll(tags);
+        if(userSearched == null) {
+            throw new BusinessException("Usuário não encontrado com o id " + postDto.getUserId(), HttpStatus.NOT_FOUND.value());
+        }
+
+        Post postToBeSaved = new Post(postDto.getImageUrl(), postDto.getContent(), userSearched);
+
+        if (postDto.getTagsIds() != null) {
+            List<Tag> tags = tagJpaRepository.findAllById(postDto.getTagsIds());
+            postToBeSaved.setTags(tags);
+        }
+
         return postJpaRepository.save(postToBeSaved);
     }
 
@@ -51,25 +62,28 @@ public class PostService {
         postJpaRepository.deleteById(id);
     }
 
-    public Post updatePost(UpdatePostDto post) {
+    public Post updatePost(UpdatePostDto postDto) {
+        User userSearched = userJpaRepository.findById(postDto.getId()).orElse(null);
 
-        User userSearched = userJpaRepository.findById(post.getId()).orElse(null);
         if(userSearched == null) {
-            throw new IllegalStateException("Erro ao buscar usuário");
+            throw new BusinessException("Usuário não encontrado com id " + postDto.getUserId(), HttpStatus.NOT_FOUND.value());
         }
 
-        Post postSave = postJpaRepository.findById(post.getId()).orElse(null);
-        if(postSave == null) {
-            throw new IllegalStateException("Erro ao buscar post");
+        Post postToBeUpdated = postJpaRepository.findById(postDto.getId()).orElse(null);
+
+        if(postToBeUpdated == null) {
+            throw new BusinessException("Publicação não encontrada com id " + postDto.getId(), HttpStatus.NOT_FOUND.value());
         }
 
-        List<Tag> tags = tagJpaRepository.findAllById(post.getTagsIds());
+        postToBeUpdated.setImageUrl(postDto.getImageUrl());
+        postToBeUpdated.setContent(postDto.getContent());
+        postToBeUpdated.setUser(userSearched);
 
-        postSave.setImageUrl(post.getImageUrl());
-        postSave.setContent(post.getContent());
-        postSave.setUser(userSearched);
-        postSave.tags = tags;
+        if (postDto.getTagsIds() != null) {
+            List<Tag> tags = tagJpaRepository.findAllById(postDto.getTagsIds());
+            postToBeUpdated.setTags(tags);
+        }
 
-        return postJpaRepository.save(postSave);
+        return postJpaRepository.save(postToBeUpdated);
     }
 }

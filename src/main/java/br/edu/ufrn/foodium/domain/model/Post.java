@@ -43,7 +43,7 @@ public class Post  extends Auditable {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    public List<Tag> tags = new ArrayList<>();
+    private List<Tag> tags = new ArrayList<>();
 
     @Column(name = "image_url")
     private String imageUrl;
