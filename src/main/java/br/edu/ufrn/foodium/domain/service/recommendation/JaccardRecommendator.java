@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class JaccardRecommendator implements Recommendator{
     @Override
-    public boolean recommend(List<Long> sourceTags, List<Long> targetTags) {
+    public float recommend(List<Long> sourceTags, List<Long> targetTags) {
         float index = calculateIndex(sourceTags, targetTags);
-        return !(index < 0.5f);
+        return index;
     }
     
     private Float calculateIndex(List<Long> sourceTags, List<Long> targetTags) {

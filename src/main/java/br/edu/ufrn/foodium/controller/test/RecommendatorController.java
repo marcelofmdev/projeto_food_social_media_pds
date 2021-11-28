@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -23,15 +25,22 @@ public class RecommendatorController {
     }
 
     @GetMapping
-    public boolean getResponse(@RequestBody requestDTO dto) {
-        return recommendator.recommend(dto.source, dto.target);
+    public List<Float> getResponse(@RequestBody requestDTO dto) {
+        List<Float> recommendationList = new ArrayList<>();
+
+        for(List<Long> list : dto.target) {
+            recommendationList.add(recommendator.recommend(dto.source, list));
+        }
+        recommendationList.sort(Collections.reverseOrder());
+
+        return recommendationList;
     }
 
     public static class requestDTO {
         public List<Long> source;
-        public List<Long> target;
+        public List<List<Long>> target;
 
-        public requestDTO(List<Long> source, List<Long> target) {
+        public requestDTO(List<Long> source, List<List<Long>> target) {
             this.source = source;
             this.target = target;
         }

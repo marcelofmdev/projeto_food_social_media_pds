@@ -5,5 +5,5 @@ import br.edu.ufrn.foodium.domain.model.Tag;
 import java.util.List;
 
 public interface Recommendator {
-    public boolean recommend(List<Long> sourceTags, List<Long> targetTags);
+    public float recommend(List<Long> sourceTags, List<Long> targetTags);
 }
