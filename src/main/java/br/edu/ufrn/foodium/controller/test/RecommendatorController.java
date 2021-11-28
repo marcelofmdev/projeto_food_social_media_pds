@@ -2,6 +2,7 @@ package br.edu.ufrn.foodium.controller.test;
 
 import br.edu.ufrn.foodium.domain.model.Tag;
 import br.edu.ufrn.foodium.domain.service.recommendation.JaccardRecommendator;
+import br.edu.ufrn.foodium.domain.service.recommendation.RecommendationListing;
 import br.edu.ufrn.foodium.domain.service.recommendation.Recommendator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +26,14 @@ public class RecommendatorController {
     }
 
     @GetMapping
-    public List<Float> getResponse(@RequestBody requestDTO dto) {
-        List<Float> recommendationList = new ArrayList<>();
+    public List<List<Long>> getResponse(@RequestBody requestDTO dto) {
+        List<List<Long>> recommendationList = new ArrayList<>();
 
-        for(List<Long> list : dto.target) {
-            recommendationList.add(recommendator.recommend(dto.source, list));
-        }
-        recommendationList.sort(Collections.reverseOrder());
+        recommendationList = RecommendationListing.sortRecommendationList(
+                new JaccardRecommendator(),
+                dto.source,
+                dto.target
+        );
 
         return recommendationList;
     }
