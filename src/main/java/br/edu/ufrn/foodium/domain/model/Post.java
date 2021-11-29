@@ -1,19 +1,32 @@
 package br.edu.ufrn.foodium.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.ToString.Exclude;
+import org.hibernate.Hibernate;
 
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.data.annotation.CreatedDate;
-
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,6 +56,7 @@ public class Post  extends Auditable {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @Exclude
     private List<Tag> tags = new ArrayList<>();
 
     @Column(name = "image_url")
@@ -51,14 +65,9 @@ public class Post  extends Auditable {
     @Column
     private String content;
 
-    @Override
-    public Long getId() {
-        return this.id;
-    }
-
     @JsonIgnore
     @Override
     public boolean isNew() {
-        return this.id != null;
+        return false;
     }
 }

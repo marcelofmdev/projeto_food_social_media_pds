@@ -74,30 +74,7 @@ public class User extends Auditable {
 
     @JsonIgnore
     @Override
-    public Long getId() {
-        return this.id;
-    }
-
-    @JsonIgnore
-    @Override
     public boolean isNew() {
-        return this.id != null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-            return false;
-        }
-        User user = (User) o;
-        return id != null && Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
+        return false;
     }
 }
