@@ -5,7 +5,6 @@ import br.edu.ufrn.foodium.controller.dto.user.UpdateUserDto;
 import br.edu.ufrn.foodium.domain.exception.BusinessException;
 import br.edu.ufrn.foodium.domain.model.Tag;
 import br.edu.ufrn.foodium.domain.model.User;
-import br.edu.ufrn.foodium.repository.TagJpaRepository;
 import br.edu.ufrn.foodium.repository.UserJpaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class UserService {
     private UserJpaRepository userJpaRepository;
 
     @Autowired
-    private TagJpaRepository tagJpaRepository;
+    private TagService tagService;
 
     public List<User> getUsers() {
         return userJpaRepository.findAll();
@@ -39,7 +38,7 @@ public class UserService {
         User newUser = new User(userDto.getName(), userDto.getUserName(), userDto.getPassword());
 
         if (userDto.getTagsIds() != null) {
-            List<Tag> tags = tagJpaRepository.findAllById(userDto.getTagsIds());
+            List<Tag> tags = tagService.getAllByIds(userDto.getTagsIds());
             newUser.setTags(tags);
         }
 
@@ -61,7 +60,7 @@ public class UserService {
         }
 
         if (userDto.getTagsIds() != null) {
-            List<Tag> tags = tagJpaRepository.findAllById(userDto.getTagsIds());
+            List<Tag> tags = tagService.getAllByIds(userDto.getTagsIds());
             user.setTags(tags);
         }
 
