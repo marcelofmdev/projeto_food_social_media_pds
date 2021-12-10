@@ -7,7 +7,6 @@ import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.model.Tag;
 import br.edu.ufrn.foodium.domain.model.User;
 import br.edu.ufrn.foodium.repository.PostJpaRepository;
-import br.edu.ufrn.foodium.repository.TagJpaRepository;
 import br.edu.ufrn.foodium.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class PostService {
     private UserJpaRepository userJpaRepository;
 
     @Autowired
-    private TagJpaRepository tagJpaRepository;
+    private TagService tagService;
 
     public List<Post> getPosts() {
         return postJpaRepository.findAll();
@@ -51,7 +50,7 @@ public class PostService {
         Post postToBeSaved = new Post(postDto.getImageUrl(), postDto.getContent(), userSearched);
 
         if (postDto.getTagsIds() != null) {
-            List<Tag> tags = tagJpaRepository.findAllById(postDto.getTagsIds());
+            List<Tag> tags = tagService.getAllByIds(postDto.getTagsIds());
             postToBeSaved.setTags(tags);
         }
 
@@ -80,7 +79,7 @@ public class PostService {
         postToBeUpdated.setUser(userSearched);
 
         if (postDto.getTagsIds() != null) {
-            List<Tag> tags = tagJpaRepository.findAllById(postDto.getTagsIds());
+            List<Tag> tags = tagService.getAllByIds(postDto.getTagsIds());
             postToBeUpdated.setTags(tags);
         }
 
