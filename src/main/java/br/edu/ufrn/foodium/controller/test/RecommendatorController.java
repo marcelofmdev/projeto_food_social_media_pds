@@ -19,9 +19,9 @@ import java.util.List;
 public class RecommendatorController {
 
     @Autowired
-    private final JaccardRecommendator recommendator;
+    private final Recommendator recommendator;
 
-    public RecommendatorController(JaccardRecommendator recommendator) {
+    public RecommendatorController(Recommendator recommendator) {
         this.recommendator = recommendator;
     }
 
