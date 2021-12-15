@@ -4,6 +4,7 @@ import br.edu.ufrn.foodium.controller.dto.post.CreatePostDto;
 import br.edu.ufrn.foodium.controller.dto.post.UpdatePostDto;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.service.PostService;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +28,12 @@ public class PostController {
     }
 
     @PostMapping
-    public Post createPost(@RequestBody CreatePostDto post) {
+    public Post createPost(@Valid @RequestBody CreatePostDto post) {
         return postService.savePost(post);
     }
 
     @PutMapping
-    public Post updatePost(@RequestBody UpdatePostDto post) {
+    public Post updatePost(@Valid @RequestBody UpdatePostDto post) {
         return postService.updatePost(post);
     }
 

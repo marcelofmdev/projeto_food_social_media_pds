@@ -5,9 +5,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BusinessException extends RuntimeException {
+public class NotFoundException extends RuntimeException {
 
-    public BusinessException(String message) {
+    public NotFoundException(String message) {
         super(message);
     }
 }

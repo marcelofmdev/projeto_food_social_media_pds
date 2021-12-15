@@ -2,6 +2,7 @@ package br.edu.ufrn.foodium.controller;
 
 import br.edu.ufrn.foodium.controller.dto.ErrorMessageDto;
 import br.edu.ufrn.foodium.domain.exception.BusinessException;
+import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private static final String DEFAULT_ERROR_MESSAGE = "Ocorreu um erro interno. Já estamos trabalhando para tentar resolvê-lo, por favor tente novamente mais tarde.";
 
     @NonNull
     @Override
@@ -44,9 +47,18 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorMessageDto> businessException(BusinessException exception, WebRequest request) {
         ErrorMessageDto errorMessageDto = new ErrorMessageDto(
-            exception.getStatusCode() != null
-                ? exception.getStatusCode()
-                : HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            new Date(),
+            Collections.singletonList(exception.getMessage()),
+            request.getDescription(false));
+
+        return new ResponseEntity<>(errorMessageDto, HttpStatus.valueOf(errorMessageDto.getStatusCode()));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorMessageDto> notFoundException(NotFoundException exception, WebRequest request) {
+        ErrorMessageDto errorMessageDto = new ErrorMessageDto(
+            HttpStatus.NOT_FOUND.value(),
             new Date(),
             Collections.singletonList(exception.getMessage()),
             request.getDescription(false));
@@ -60,7 +72,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ErrorMessageDto(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             new Date(),
-            Collections.singletonList(ex.getMessage()),
+            Collections.singletonList(DEFAULT_ERROR_MESSAGE),
             request.getDescription(false));
     }
 }

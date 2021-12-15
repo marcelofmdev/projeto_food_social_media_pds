@@ -2,17 +2,18 @@ package br.edu.ufrn.foodium.domain.service;
 
 import br.edu.ufrn.foodium.controller.dto.post.CreatePostDto;
 import br.edu.ufrn.foodium.controller.dto.post.UpdatePostDto;
-import br.edu.ufrn.foodium.domain.exception.BusinessException;
+import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.model.Tag;
 import br.edu.ufrn.foodium.domain.model.User;
 import br.edu.ufrn.foodium.repository.PostJpaRepository;
 import br.edu.ufrn.foodium.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PostService {
@@ -34,17 +35,18 @@ public class PostService {
         Post post = postJpaRepository.findById(id).orElse(null);
 
         if (post == null) {
-            throw new BusinessException("Publicação não encontrada com id " + id, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Publicação não encontrada com id " + id);
         }
 
         return post;
     }
 
+    @Transactional
     public Post savePost(CreatePostDto postDto) {
         User userSearched = userJpaRepository.findById(postDto.getUserId()).orElse(null);
 
         if(userSearched == null) {
-            throw new BusinessException("Usuário não encontrado com o id " + postDto.getUserId(), HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Usuário não encontrado com o id " + postDto.getUserId());
         }
 
         Post postToBeSaved = new Post(postDto.getImageUrl(), postDto.getContent(), userSearched);
@@ -57,21 +59,18 @@ public class PostService {
         return postJpaRepository.save(postToBeSaved);
     }
 
-    public void removePost(Long id) {
-        postJpaRepository.deleteById(id);
-    }
-
+    @Transactional
     public Post updatePost(UpdatePostDto postDto) {
         User userSearched = userJpaRepository.findById(postDto.getId()).orElse(null);
 
         if(userSearched == null) {
-            throw new BusinessException("Usuário não encontrado com id " + postDto.getUserId(), HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Usuário não encontrado com id " + postDto.getUserId());
         }
 
         Post postToBeUpdated = postJpaRepository.findById(postDto.getId()).orElse(null);
 
         if(postToBeUpdated == null) {
-            throw new BusinessException("Publicação não encontrada com id " + postDto.getId(), HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Publicação não encontrada com id " + postDto.getId());
         }
 
         postToBeUpdated.setImageUrl(postDto.getImageUrl());
@@ -84,5 +83,14 @@ public class PostService {
         }
 
         return postJpaRepository.save(postToBeUpdated);
+    }
+
+    @Transactional
+    public void removePost(Long id) {
+        try {
+            postJpaRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception) {
+            throw new NotFoundException("Publicação não encontrada com id " + id);
+        }
     }
 }
