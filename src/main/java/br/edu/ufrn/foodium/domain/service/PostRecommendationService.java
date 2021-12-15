@@ -1,6 +1,7 @@
 package br.edu.ufrn.foodium.domain.service;
 
 import br.edu.ufrn.foodium.domain.exception.BusinessException;
+import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.model.User;
 import br.edu.ufrn.foodium.domain.service.recommendation.Recommendator;
@@ -32,38 +33,48 @@ public class PostRecommendationService {
         User searchedUser = userJpaRepository.findById(userid).orElse(null);
 
         if(searchedUser == null) {
-            throw new BusinessException("Usuário não encontrado com id " + userid, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Usuário não encontrado com id " + userid);
         }
 
         List<Post> allPosts = postJpaRepository.findAll();
 
         if(allPosts.isEmpty()) {
-            throw new BusinessException("Não há posts cadastrados", HttpStatus.NOT_FOUND.value());
+            return allPosts;
         }
 
         return sortPostList(searchedUser, allPosts);
     }
 
-    private List<Post> sortPostList(
-            User source,
-            List<Post> target
-    ) {
+    private List<Post> sortPostList(User source, List<Post> target) {
+        if(source.getTags().isEmpty() || target.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         List<Tuple> indexedList = new ArrayList<>();
 
         for (TagRecommendable recommendable : target) {
-            Float index = recommendator.recommend(source, recommendable);
-            Tuple tuple = new Tuple(index, recommendable);
-            indexedList.add(tuple);
+            try {
+                Float index = recommendator.recommend(source, recommendable);
+                Tuple tuple = new Tuple(index, recommendable);
+                indexedList.add(tuple);
+            }
+            catch (NullPointerException e) {
+                // Iteration continues
+            }
+        }
+
+        if(indexedList.isEmpty()) {
+            return new ArrayList<>();
         }
 
         // Greatest to the lowest index
         indexedList.sort(Comparator.reverseOrder());
-        List<Post> tagsSortedList = new ArrayList<>();
+        List<Post> sortedPostList = new ArrayList<>();
 
         for (Tuple tuple : indexedList) {
-            tagsSortedList.add((Post) tuple.getValue());
+            sortedPostList.add((Post) tuple.getValue());
         }
 
-        return ((List<Post>) tagsSortedList);
+        return sortedPostList;
     }
 }

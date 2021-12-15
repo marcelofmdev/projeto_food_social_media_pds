@@ -9,23 +9,32 @@ import java.util.List;
 
 @Service
 @Primary
-public class JaccardRecommendator implements Recommendator{
+public class JaccardRecommendator implements Recommendator {
     @Override
     public float recommend(TagRecommendable source, TagRecommendable target) {
-        float index = calculateIndex(source, target);
-        return index;
+        return calculateIndex(source, target);
     }
     
-    private Float calculateIndex(TagRecommendable source, TagRecommendable target) {
+    private Float calculateIndex(TagRecommendable source, TagRecommendable target)
+            throws NullPointerException {
+
+        if (source.getRecommendableTags().isEmpty()
+                || target.getRecommendableTags().isEmpty()) {
+            throw new NullPointerException();
+        }
+
         float index = 0f;
         int union = 0;
         int intersection = 0;
 
         List<Tag> intersectionTags = new ArrayList<>();
-
         for (Tag sourceTag : source.getRecommendableTags()) {
             for (Tag targetTag : target.getRecommendableTags()) {
-                if(sourceTag.getId().equals(targetTag.getId())) {
+                if(sourceTag.getId() == null || targetTag.getId() == null) {
+                    throw new NullPointerException();
+                }
+
+                if (sourceTag.getId().equals(targetTag.getId())) {
                     intersectionTags.add(sourceTag);
                     break;
                 }
