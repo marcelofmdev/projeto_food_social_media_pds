@@ -2,7 +2,6 @@ package br.edu.ufrn.foodium.domain.service;
 
 import br.edu.ufrn.foodium.controller.dto.post.CreatePostDto;
 import br.edu.ufrn.foodium.controller.dto.post.UpdatePostDto;
-import br.edu.ufrn.foodium.domain.exception.BusinessException;
 import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.model.Tag;
@@ -10,10 +9,11 @@ import br.edu.ufrn.foodium.domain.model.User;
 import br.edu.ufrn.foodium.repository.PostJpaRepository;
 import br.edu.ufrn.foodium.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PostService {
@@ -41,6 +41,7 @@ public class PostService {
         return post;
     }
 
+    @Transactional
     public Post savePost(CreatePostDto postDto) {
         User userSearched = userJpaRepository.findById(postDto.getUserId()).orElse(null);
 
@@ -58,10 +59,7 @@ public class PostService {
         return postJpaRepository.save(postToBeSaved);
     }
 
-    public void removePost(Long id) {
-        postJpaRepository.deleteById(id);
-    }
-
+    @Transactional
     public Post updatePost(UpdatePostDto postDto) {
         User userSearched = userJpaRepository.findById(postDto.getId()).orElse(null);
 
@@ -85,5 +83,14 @@ public class PostService {
         }
 
         return postJpaRepository.save(postToBeUpdated);
+    }
+
+    @Transactional
+    public void removePost(Long id) {
+        try {
+            postJpaRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception) {
+            throw new NotFoundException("Publicação não encontrada com id " + id);
+        }
     }
 }
