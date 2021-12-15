@@ -36,6 +36,16 @@ public class PostController {
         return postService.updatePost(post);
     }
 
+    @PostMapping("/addLike/{postId}/{userId}")
+    public void addLikeIntoPost(@PathVariable Integer postId, @PathVariable Integer userId) {
+        postService.addLikeIntoPost(postId, userId);
+    }
+
+    @PostMapping("/deleteLike/{postId}/{userId}")
+    public void deleteLikeIntoPost(@PathVariable Integer postId, @PathVariable Integer userId) {
+        postService.deleteLikeIntoPost(postId, userId);
+    }
+
     @DeleteMapping(path = "/{id}")
     public void deletePost(@PathVariable Long id) {
         postService.removePost(id);

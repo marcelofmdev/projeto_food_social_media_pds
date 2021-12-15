@@ -40,6 +40,37 @@ public class PostService {
         return post;
     }
 
+    public void addLikeIntoPost(Integer postId, Integer userId) {
+        Post postSearched = postJpaRepository.findById(Long.valueOf(postId)).orElse(null);
+        User userSearched = userJpaRepository.findById(Long.valueOf(userId)).orElse(null);
+        if( postSearched == null)  {
+            throw new BusinessException("Post não encontrado com o id " + postId, HttpStatus.NOT_FOUND.value());
+        }
+        if( userSearched == null)  {
+            throw new BusinessException("User não encontrado com o id " + userId, HttpStatus.NOT_FOUND.value());
+        }
+
+        Integer newLikes = postSearched.getLikes() + 1;
+        postSearched.setLikes(newLikes);
+        postSearched.getUsersLikes().add(userSearched);
+        postJpaRepository.save(postSearched);
+    }
+
+    public void deleteLikeIntoPost(Integer postId, Integer userId) {
+        Post postSearched = postJpaRepository.findById(Long.valueOf(postId)).orElse(null);
+        User userSearched = userJpaRepository.findById(Long.valueOf(userId)).orElse(null);
+        if( postSearched == null)  {
+            throw new BusinessException("Post não encontrado com o id " + postId, HttpStatus.NOT_FOUND.value());
+        }
+        if( userSearched == null)  {
+            throw new BusinessException("User não encontrado com o id " + userId, HttpStatus.NOT_FOUND.value());
+        }
+
+        Integer newLikes = postSearched.getLikes() - 1;
+        postSearched.setLikes(newLikes);
+        postSearched.getUsersLikes().remove(userSearched);
+        postJpaRepository.save(postSearched);
+    }
     public Post savePost(CreatePostDto postDto) {
         User userSearched = userJpaRepository.findById(postDto.getUserId()).orElse(null);
 

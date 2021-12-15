@@ -59,15 +59,27 @@ public class Post  extends Auditable {
     @Exclude
     private List<Tag> tags = new ArrayList<>();
 
+    @ManyToMany()
+    @JoinTable(
+            name = "user_post_like",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @Exclude
+    private List<User> usersLikes = new ArrayList<>();
+
     @Column(name = "image_url")
     private String imageUrl;
 
     @Column
     private String content;
 
+    @Column(nullable = false)
+    private Integer likes = 0;
+
     @JsonIgnore
     @Override
     public boolean isNew() {
-        return false;
+        return this.id == null;
     }
 }
