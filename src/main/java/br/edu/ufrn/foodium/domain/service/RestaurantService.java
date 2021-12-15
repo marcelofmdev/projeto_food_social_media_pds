@@ -2,14 +2,15 @@ package br.edu.ufrn.foodium.domain.service;
 
 import br.edu.ufrn.foodium.controller.dto.restaurant.CreateRestaurantDto;
 import br.edu.ufrn.foodium.controller.dto.restaurant.UpdateRestaurantDto;
-import br.edu.ufrn.foodium.domain.exception.BusinessException;
+import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium.domain.model.Restaurant;
 import br.edu.ufrn.foodium.domain.model.Tag;
 import br.edu.ufrn.foodium.repository.RestaurantJpaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RestaurantService {
@@ -28,12 +29,13 @@ public class RestaurantService {
         Restaurant restaurant = restaurantJpaRepository.findById(id).orElse(null);
 
         if (restaurant == null) {
-            throw new BusinessException("Restaurante não encontrado com id " + id, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Restaurante não encontrado com id " + id);
         }
 
         return restaurant;
     }
 
+    @Transactional
     public Restaurant saveRestaurant(CreateRestaurantDto restaurantDto) {
         Restaurant newRestaurant = new Restaurant(restaurantDto.getName(), restaurantDto.getDescription(), restaurantDto.getLogo());
 
@@ -45,11 +47,12 @@ public class RestaurantService {
         return restaurantJpaRepository.save(newRestaurant);
     }
 
+    @Transactional
     public Restaurant updateRestaurant(UpdateRestaurantDto restaurantDto) {
         Restaurant restaurant = restaurantJpaRepository.findById(restaurantDto.getId()).orElse(null);
 
         if (restaurant == null) {
-            throw new BusinessException("Restaurante não encontrado com id " + restaurantDto.getId(), HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Restaurante não encontrado com id " + restaurantDto.getId());
         }
 
         if (restaurantDto.getName() != null) {
@@ -70,7 +73,12 @@ public class RestaurantService {
         return restaurantJpaRepository.saveAndFlush(restaurant);
     }
 
+    @Transactional
     public void removeRestaurant(Long id) {
-        restaurantJpaRepository.deleteById(id);
+        try {
+            restaurantJpaRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception) {
+            throw new NotFoundException("Restaurante não encontrado com id " + id);
+        }
     }
 }
