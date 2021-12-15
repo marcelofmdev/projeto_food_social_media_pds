@@ -1,31 +1,34 @@
-package br.edu.ufrn.foodium.controller.test;
+package br.edu.ufrn.foodium.controller;
 
-import br.edu.ufrn.foodium.domain.model.Tag;
-import br.edu.ufrn.foodium.domain.service.recommendation.JaccardRecommendator;
-import br.edu.ufrn.foodium.domain.service.recommendation.RecommendationListing;
-import br.edu.ufrn.foodium.domain.service.recommendation.Recommendator;
+import br.edu.ufrn.foodium.domain.model.Post;
+import br.edu.ufrn.foodium.domain.service.PostRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/recommendation")
-public class RecommendatorController {
+public class RecommendationController {
 
-    @Autowired
+    /*@Autowired
     private final Recommendator recommendator;
 
     public RecommendatorController(Recommendator recommendator) {
         this.recommendator = recommendator;
+    }*/
+
+    @Autowired
+    private PostRecommendationService postRecommendationService;
+
+    @GetMapping("/{userid}")
+    public List<Post> getRecommendedPosts(@PathVariable Long userid) {
+
+        return postRecommendationService.getRecommendedPosts(userid);
     }
 
-    @GetMapping
+    /*@GetMapping("/test")
     public List<List<Long>> getResponse(@RequestBody requestDTO dto) {
         List<List<Long>> recommendationList = new ArrayList<>();
 
@@ -46,5 +49,5 @@ public class RecommendatorController {
             this.source = source;
             this.target = target;
         }
-    }
+    }*/
 }

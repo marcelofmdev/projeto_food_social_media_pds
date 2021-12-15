@@ -4,6 +4,6 @@ import br.edu.ufrn.foodium.domain.model.Tag;
 
 import java.util.List;
 
-public interface Recommendator {
-    public float recommend(TagRecommendable source, TagRecommendable target);
+public interface TagRecommendable {
+    public List<Tag> getRecommendableTags();
 }

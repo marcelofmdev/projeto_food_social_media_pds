@@ -1,5 +1,6 @@
 package br.edu.ufrn.foodium.domain.model;
 
+import br.edu.ufrn.foodium.domain.service.recommendation.TagRecommendable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ import org.hibernate.Hibernate;
 @NoArgsConstructor
 @Entity
 @Table(name = "post", schema = "public")
-public class Post  extends Auditable {
+public class Post extends Auditable implements TagRecommendable {
 
     public Post(String imageUrl, String content, User user) {
         this.imageUrl = imageUrl;
@@ -69,5 +70,10 @@ public class Post  extends Auditable {
     @Override
     public boolean isNew() {
         return false;
+    }
+
+    @Override
+    public List<Tag> getRecommendableTags() {
+        return getTags();
     }
 }
