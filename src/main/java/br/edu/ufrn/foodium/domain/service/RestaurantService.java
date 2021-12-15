@@ -3,6 +3,7 @@ package br.edu.ufrn.foodium.domain.service;
 import br.edu.ufrn.foodium.controller.dto.restaurant.CreateRestaurantDto;
 import br.edu.ufrn.foodium.controller.dto.restaurant.UpdateRestaurantDto;
 import br.edu.ufrn.foodium.domain.exception.BusinessException;
+import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium.domain.model.Restaurant;
 import br.edu.ufrn.foodium.domain.model.Tag;
 import br.edu.ufrn.foodium.repository.RestaurantJpaRepository;
@@ -28,7 +29,7 @@ public class RestaurantService {
         Restaurant restaurant = restaurantJpaRepository.findById(id).orElse(null);
 
         if (restaurant == null) {
-            throw new BusinessException("Restaurante não encontrado com id " + id, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Restaurante não encontrado com id " + id);
         }
 
         return restaurant;
@@ -49,7 +50,7 @@ public class RestaurantService {
         Restaurant restaurant = restaurantJpaRepository.findById(restaurantDto.getId()).orElse(null);
 
         if (restaurant == null) {
-            throw new BusinessException("Restaurante não encontrado com id " + restaurantDto.getId(), HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Restaurante não encontrado com id " + restaurantDto.getId());
         }
 
         if (restaurantDto.getName() != null) {

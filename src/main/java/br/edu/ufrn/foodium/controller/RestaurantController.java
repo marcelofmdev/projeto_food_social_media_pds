@@ -5,6 +5,7 @@ import br.edu.ufrn.foodium.controller.dto.restaurant.UpdateRestaurantDto;
 import br.edu.ufrn.foodium.domain.model.Restaurant;
 import br.edu.ufrn.foodium.domain.service.RestaurantService;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,12 +34,12 @@ public class RestaurantController {
     }
 
     @PostMapping
-    public Restaurant createRestaurant(@RequestBody CreateRestaurantDto restaurant) {
+    public Restaurant createRestaurant(@Valid @RequestBody CreateRestaurantDto restaurant) {
         return restaurantService.saveRestaurant(restaurant);
     }
 
     @PutMapping
-    public Restaurant updateRestaurant(@RequestBody UpdateRestaurantDto restaurant) {
+    public Restaurant updateRestaurant(@Valid @RequestBody UpdateRestaurantDto restaurant) {
         return restaurantService.updateRestaurant(restaurant);
     }
 

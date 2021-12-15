@@ -3,6 +3,7 @@ package br.edu.ufrn.foodium.domain.service;
 import br.edu.ufrn.foodium.controller.dto.user.CreateUserDto;
 import br.edu.ufrn.foodium.controller.dto.user.UpdateUserDto;
 import br.edu.ufrn.foodium.domain.exception.BusinessException;
+import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium.domain.model.Tag;
 import br.edu.ufrn.foodium.domain.model.User;
 import br.edu.ufrn.foodium.repository.UserJpaRepository;
@@ -28,7 +29,7 @@ public class UserService {
         User user = userJpaRepository.findById(id).orElse(null);
 
         if (user == null) {
-            throw new BusinessException("Usuário não encontrado com id " + id, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Usuário não encontrado com id " + id);
         }
 
         return user;
@@ -49,7 +50,7 @@ public class UserService {
         User user = userJpaRepository.findById(userDto.getId()).orElse(null);
 
         if (user == null) {
-            throw new BusinessException("Usuário não encontrado com id " + userDto.getId(), HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Usuário não encontrado com id " + userDto.getId());
         }
 
         if (userDto.getName() != null) {
