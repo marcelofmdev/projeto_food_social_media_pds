@@ -65,6 +65,11 @@ public class User extends Auditable implements TagRecommendable {
     @Exclude
     private List<Post> posts = new ArrayList<>();
 
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user_post_like")
+//    @Exclude
+//    private List<Post> postsLikes = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
         name = "user_tag",
