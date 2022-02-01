@@ -45,10 +45,10 @@ public class PostService {
         Post postSearched = postJpaRepository.findById(Long.valueOf(postId)).orElse(null);
         User userSearched = userJpaRepository.findById(Long.valueOf(userId)).orElse(null);
         if( postSearched == null)  {
-            throw new BusinessException("Post não encontrado com o id " + postId, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Post não encontrado com o id " + postId);
         }
         if( userSearched == null)  {
-            throw new BusinessException("User não encontrado com o id " + userId, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("User não encontrado com o id " + userId);
         }
 
         Integer newLikes = postSearched.getLikes() + 1;
@@ -61,10 +61,10 @@ public class PostService {
         Post postSearched = postJpaRepository.findById(Long.valueOf(postId)).orElse(null);
         User userSearched = userJpaRepository.findById(Long.valueOf(userId)).orElse(null);
         if( postSearched == null)  {
-            throw new BusinessException("Post não encontrado com o id " + postId, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("Post não encontrado com o id " + postId);
         }
         if( userSearched == null)  {
-            throw new BusinessException("User não encontrado com o id " + userId, HttpStatus.NOT_FOUND.value());
+            throw new NotFoundException("User não encontrado com o id " + userId);
         }
 
         Integer newLikes = postSearched.getLikes() - 1;
