@@ -1,16 +1,12 @@
 package br.edu.ufrn.foodium.domain.service;
 
-import br.edu.ufrn.foodium.domain.exception.BusinessException;
 import br.edu.ufrn.foodium.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.domain.model.User;
-import br.edu.ufrn.foodium.domain.service.recommendation.Recommendator;
-import br.edu.ufrn.foodium.domain.service.recommendation.TagRecommendable;
-import br.edu.ufrn.foodium.domain.service.recommendation.Tuple;
+import br.edu.ufrn.foodium.domain.service.recommendation.*;
 import br.edu.ufrn.foodium.repository.PostJpaRepository;
 import br.edu.ufrn.foodium.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,8 +22,8 @@ public class PostRecommendationService {
     @Autowired
     private PostJpaRepository postJpaRepository;
 
-    @Autowired
-    private Recommendator recommendator;
+//    @Autowired
+//    private Recommendator recommendator;
 
     public List<Post> getRecommendedPosts(Long userid) {
         User searchedUser = userJpaRepository.findById(userid).orElse(null);
@@ -50,11 +46,15 @@ public class PostRecommendationService {
             return new ArrayList<>();
         }
 
+        RecommendationContext recommendator = new RecommendationContext();
+
+        recommendator.setReconmendator(new JaccardRecommendator());
+
         List<Tuple> indexedList = new ArrayList<>();
 
         for (TagRecommendable recommendable : target) {
             try {
-                Float index = recommendator.recommend(source, recommendable);
+                Float index = recommendator.executeRecomentador(source, recommendable);
                 Tuple tuple = new Tuple(index, recommendable);
                 indexedList.add(tuple);
             }
