@@ -1,7 +1,7 @@
 package br.edu.ufrn.foodium_app.controller;
 
 import br.edu.ufrn.foodium_app.domain.model.Post;
-import br.edu.ufrn.foodium_app.domain.service.PostRecommendationService;
+import br.edu.ufrn.foodium_app.service.PostRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +19,6 @@ public class RecommendationController {
 
     @GetMapping("/{userid}")
     public List<Post> getRecommendedPosts(@PathVariable Long userid) {
-        return postRecommendationService.getRecommendedPosts(userid);
+        return postRecommendationService.getRecommendedResources(userid);
     }
 }

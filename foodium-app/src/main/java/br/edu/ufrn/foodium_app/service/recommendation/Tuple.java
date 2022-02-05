@@ -1,4 +1,4 @@
-package br.edu.ufrn.foodium_app.domain.service.recommendation;
+package br.edu.ufrn.foodium_app.service.recommendation;
 
 public class Tuple implements Comparable<Tuple> {
     private Float index;

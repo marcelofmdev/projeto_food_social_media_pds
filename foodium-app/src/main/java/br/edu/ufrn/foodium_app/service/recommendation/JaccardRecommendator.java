@@ -1,4 +1,4 @@
-package br.edu.ufrn.foodium_app.domain.service.recommendation;
+package br.edu.ufrn.foodium_app.service.recommendation;
 
 import br.edu.ufrn.framework.domain.model.Tag;
 import br.edu.ufrn.framework.domain.model.recommendation.Recommendator;

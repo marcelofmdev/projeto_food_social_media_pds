@@ -3,7 +3,7 @@ package br.edu.ufrn.foodium_app.controller;
 import br.edu.ufrn.foodium_app.controller.dto.post.CreatePostDto;
 import br.edu.ufrn.foodium_app.controller.dto.post.UpdatePostDto;
 import br.edu.ufrn.foodium_app.domain.model.Post;
-import br.edu.ufrn.foodium_app.domain.service.PostService;
+import br.edu.ufrn.foodium_app.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,18 +13,17 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/post")
 public class PostController {
-
     @Autowired
     private PostService postService;
 
     @GetMapping
     public List<Post> getPosts() {
-        return postService.getPosts();
+        return postService.getAll();
     }
 
     @GetMapping("/{id}")
     public Post getPost(@PathVariable Long id) {
-        return postService.getPost(id);
+        return postService.getOne(id);
     }
 
     @PostMapping
@@ -49,6 +48,6 @@ public class PostController {
 
     @DeleteMapping(path = "/{id}")
     public void deletePost(@PathVariable Long id) {
-        postService.removePost(id);
+        postService.remove(id);
     }
 }

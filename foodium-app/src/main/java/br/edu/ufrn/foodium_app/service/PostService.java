@@ -1,26 +1,22 @@
-package br.edu.ufrn.foodium_app.domain.service;
+package br.edu.ufrn.foodium_app.service;
 
 import br.edu.ufrn.foodium_app.controller.dto.post.CreatePostDto;
 import br.edu.ufrn.foodium_app.controller.dto.post.UpdatePostDto;
-import br.edu.ufrn.foodium_app.repository.PostJpaRepository;
 import br.edu.ufrn.framework.domain.exception.NotFoundException;
 import br.edu.ufrn.foodium_app.domain.model.Post;
 import br.edu.ufrn.framework.domain.model.Tag;
 import br.edu.ufrn.framework.domain.model.User;
+import br.edu.ufrn.framework.domain.service.ResourceService;
 import br.edu.ufrn.framework.domain.service.TagService;
 import br.edu.ufrn.framework.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class PostService {
-
-    @Autowired
-    private PostJpaRepository postJpaRepository;
+public class PostService extends ResourceService<Post> {
 
     @Autowired
     private UserJpaRepository userJpaRepository;
@@ -28,22 +24,8 @@ public class PostService {
     @Autowired
     private TagService tagService;
 
-    public List<Post> getPosts() {
-        return postJpaRepository.findAll();
-    }
-
-    public Post getPost(Long id) {
-        Post post = postJpaRepository.findById(id).orElse(null);
-
-        if (post == null) {
-            throw new NotFoundException("Publicação não encontrada com id " + id);
-        }
-
-        return post;
-    }
-
     public void addLikeIntoPost(Integer postId, Integer userId) {
-        Post postSearched = postJpaRepository.findById(Long.valueOf(postId)).orElse(null);
+        Post postSearched = resourceJpaRepository.findById(Long.valueOf(postId)).orElse(null);
         User userSearched = userJpaRepository.findById(Long.valueOf(userId)).orElse(null);
         if( postSearched == null)  {
             throw new NotFoundException("Post não encontrado com o id " + postId);
@@ -55,11 +37,11 @@ public class PostService {
         Integer newLikes = postSearched.getLikes() + 1;
         postSearched.setLikes(newLikes);
         postSearched.getUsersLikes().add(userSearched);
-        postJpaRepository.save(postSearched);
+        resourceJpaRepository.save(postSearched);
     }
 
     public void deleteLikeIntoPost(Integer postId, Integer userId) {
-        Post postSearched = postJpaRepository.findById(Long.valueOf(postId)).orElse(null);
+        Post postSearched = resourceJpaRepository.findById(Long.valueOf(postId)).orElse(null);
         User userSearched = userJpaRepository.findById(Long.valueOf(userId)).orElse(null);
         if( postSearched == null)  {
             throw new NotFoundException("Post não encontrado com o id " + postId);
@@ -71,7 +53,7 @@ public class PostService {
         Integer newLikes = postSearched.getLikes() - 1;
         postSearched.setLikes(newLikes);
         postSearched.getUsersLikes().remove(userSearched);
-        postJpaRepository.save(postSearched);
+        resourceJpaRepository.save(postSearched);
     }
 
     @Transactional
@@ -89,7 +71,7 @@ public class PostService {
             postToBeSaved.setTags(tags);
         }
 
-        return postJpaRepository.save(postToBeSaved);
+        return resourceJpaRepository.save(postToBeSaved);
     }
 
     @Transactional
@@ -100,7 +82,7 @@ public class PostService {
             throw new NotFoundException("Usuário não encontrado com id " + postDto.getUserId());
         }
 
-        Post postToBeUpdated = postJpaRepository.findById(postDto.getId()).orElse(null);
+        Post postToBeUpdated = resourceJpaRepository.findById(postDto.getId()).orElse(null);
 
         if(postToBeUpdated == null) {
             throw new NotFoundException("Publicação não encontrada com id " + postDto.getId());
@@ -115,15 +97,7 @@ public class PostService {
             postToBeUpdated.setTags(tags);
         }
 
-        return postJpaRepository.save(postToBeUpdated);
+        return resourceJpaRepository.save(postToBeUpdated);
     }
 
-    @Transactional
-    public void removePost(Long id) {
-        try {
-            postJpaRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException exception) {
-            throw new NotFoundException("Publicação não encontrada com id " + id);
-        }
-    }
 }

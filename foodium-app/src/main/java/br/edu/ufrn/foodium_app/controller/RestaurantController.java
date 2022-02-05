@@ -3,7 +3,7 @@ package br.edu.ufrn.foodium_app.controller;
 import br.edu.ufrn.foodium_app.controller.dto.restaurant.CreateRestaurantDto;
 import br.edu.ufrn.foodium_app.controller.dto.restaurant.UpdateRestaurantDto;
 import br.edu.ufrn.foodium_app.domain.model.Restaurant;
-import br.edu.ufrn.foodium_app.domain.service.RestaurantService;
+import br.edu.ufrn.foodium_app.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +19,12 @@ public class RestaurantController {
 
     @GetMapping
     public List<Restaurant> getRestaurants() {
-        return restaurantService.getRestaurants();
+        return restaurantService.getAll();
     }
 
     @GetMapping("/{id}")
     public Restaurant getRestaurant(@PathVariable Long id) {
-        return restaurantService.getRestaurant(id);
+        return restaurantService.getOne(id);
     }
 
     @PostMapping
@@ -39,6 +39,6 @@ public class RestaurantController {
 
     @DeleteMapping(path = "/{id}")
     public void deleteRestaurant(@PathVariable Long id) {
-        restaurantService.removeRestaurant(id);
+        restaurantService.remove(id);
     }
 }

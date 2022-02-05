@@ -9,11 +9,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "post", schema = "public") // como deixar isso generico??????
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Resource extends Auditable implements TagRecommendable {
 
     @Id
@@ -24,12 +23,12 @@ public abstract class Resource extends Auditable implements TagRecommendable {
     @Column(nullable = false)
     public String name;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "resource_tag",                                  // como deixar isso generico??????
-//            joinColumns = @JoinColumn(name = "resource_id"),
-//            inverseJoinColumns = @JoinColumn(name = "tag_id")
-//    )
+    @ManyToMany
+    @JoinTable(
+            name = "resource_tag",
+            joinColumns = @JoinColumn(name = "resource_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     public List<Tag> tags;
 
     @JsonIgnore
