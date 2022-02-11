@@ -16,12 +16,8 @@ import javax.persistence.Table;
 @Table(name = "restaurant", schema = "public")
 public class Restaurant extends Resource {
 
-    public Restaurant(String name, String description, String logo) {
-        super();
-        this.name = name;
-        this.description = description;
-        this.logo = logo;
-    }
+    @Column
+    private String name;
 
     @Column
     private String description;

@@ -12,16 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Resource extends Auditable implements TagRecommendable {
 
     @Id
     @Column(nullable = false, name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
     protected Long id;
-
-    @Column(nullable = false)
-    protected String name;
 
     @ManyToMany
     @JoinTable(
@@ -30,6 +26,10 @@ public abstract class Resource extends Auditable implements TagRecommendable {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     protected List<Tag> tags;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    protected User user;
 
     @JsonIgnore
     @Override

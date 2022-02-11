@@ -26,10 +26,6 @@ public class Post extends Resource {
         this.user = user;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @ManyToMany()
     @JoinTable(
             name = "user_post_like",

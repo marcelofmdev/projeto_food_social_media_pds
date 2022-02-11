@@ -15,6 +15,7 @@ import java.util.Date;
 @Setter(AccessLevel.PROTECTED)
 @ToString
 @MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable implements Persistable<Long> {
 

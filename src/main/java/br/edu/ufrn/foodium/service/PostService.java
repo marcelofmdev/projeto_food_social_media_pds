@@ -8,6 +8,7 @@ import br.edu.ufrn.foodium.framework.domain.model.Tag;
 import br.edu.ufrn.foodium.framework.domain.model.User;
 import br.edu.ufrn.foodium.framework.domain.service.ResourceService;
 import br.edu.ufrn.foodium.framework.domain.service.TagService;
+import br.edu.ufrn.foodium.framework.repository.ResourceJpaRepository;
 import br.edu.ufrn.foodium.framework.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class PostService extends ResourceService<Post> {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private ResourceJpaRepository<Post> postRepository;
 
     public void addLikeIntoPost(Integer postId, Integer userId) {
         Post postSearched = resourceJpaRepository.findById(Long.valueOf(postId)).orElse(null);
