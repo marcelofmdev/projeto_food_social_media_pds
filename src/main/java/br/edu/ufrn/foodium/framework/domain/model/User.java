@@ -15,19 +15,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_foodium", schema = "public")
+@Table(name = "user_hotel", schema = "public")
 public class User extends Auditable implements TagRecommendable {
 
-    public User(String name, String userName, String password) {
+    public User(String name, String userName, String password,
+                Double locLatitude, Double locLongitude) {
         this.name = name;
         this.userName = userName;
         this.password = password;
+        this.locLatitude = locLatitude;
+        this.locLongitude = locLongitude;
     }
 
-    public User(Long id, String name, String userName) {
+    public User(Long id, String name, String userName,
+                Double locLatitude, Double locLongitude) {
         this.id = id;
         this.name = name;
         this.userName = userName;
+        this.locLatitude = locLatitude;
+        this.locLongitude = locLongitude;
     }
 
     @Id
@@ -43,6 +49,12 @@ public class User extends Auditable implements TagRecommendable {
 
     @Column
     private String password;
+
+    @Column(name = "loc_latitude")
+    private Double locLatitude;
+
+    @Column(name = "loc_longitude")
+    private Double locLongitude;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
