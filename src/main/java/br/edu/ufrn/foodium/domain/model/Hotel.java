@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "restaurant", schema = "public")
+@Table(name = "hotel", schema = "public")
 public class Hotel extends Resource {
 
     @Column
@@ -30,4 +30,6 @@ public class Hotel extends Resource {
 
     @Column(name = "loc_longitude")
     private double locLongitude;
+
+    private Double distance;
 }

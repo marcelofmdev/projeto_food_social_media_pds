@@ -18,22 +18,16 @@ import java.util.List;
 @Table(name = "user_hotel", schema = "public")
 public class User extends Auditable implements TagRecommendable {
 
-    public User(String name, String userName, String password,
-                Double locLatitude, Double locLongitude) {
+    public User(String name, String userName, String password) {
         this.name = name;
         this.userName = userName;
         this.password = password;
-        this.locLatitude = locLatitude;
-        this.locLongitude = locLongitude;
     }
 
-    public User(Long id, String name, String userName,
-                Double locLatitude, Double locLongitude) {
+    public User(Long id, String name, String userName) {
         this.id = id;
         this.name = name;
         this.userName = userName;
-        this.locLatitude = locLatitude;
-        this.locLongitude = locLongitude;
     }
 
     @Id
