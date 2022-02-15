@@ -3,14 +3,12 @@ package br.edu.ufrn.bookium.controller;
 import br.edu.ufrn.bookium.domain.model.Book;
 import br.edu.ufrn.bookium.service.BookRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(path = "api/recommendation")
 public class RecommendationController {
 
