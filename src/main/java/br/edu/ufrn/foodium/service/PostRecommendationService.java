@@ -31,7 +31,7 @@ public class PostRecommendationService extends RecommendationService<Post> {
 
         for (TagRecommendable recommendable : target) {
             try {
-                Float index = executeRecommentador(source, recommendable);
+                Float index = executeRecommendator(source, recommendable);
                 Tuple tuple = new Tuple(index, recommendable);
                 indexedList.add(tuple);
             }

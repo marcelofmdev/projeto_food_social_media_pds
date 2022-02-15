@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -43,7 +44,7 @@ public abstract class RecommendationService<T extends Resource> implements IReco
         return getRecommended(searchedUser, allResources);
     }
 
-    public float executeRecommentador(TagRecommendable source, TagRecommendable target) {
+    public float executeRecommendator(TagRecommendable source, TagRecommendable target) {
         return this.recommendator.recommend(source, target);
     }
 }
