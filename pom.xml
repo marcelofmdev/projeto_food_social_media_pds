@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.edu.ufrn</groupId>
-	<artifactId>foodium</artifactId>
+	<artifactId>bookium</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>foodium</name>
+	<name>bookium</name>
 	<description>Sistema desenvolvido para a disciplina de Projeto Detalhado de Software</description>
 
 	<properties>
