@@ -1,10 +1,12 @@
-package br.edu.ufrn.foodium.service.recommendation;
+package br.edu.ufrn.foodium.service;
 
 import br.edu.ufrn.foodium.domain.model.Hotel;
 import br.edu.ufrn.foodium.domain.model.Post;
 import br.edu.ufrn.foodium.framework.domain.model.User;
 import br.edu.ufrn.foodium.framework.domain.model.recommendation.TagRecommendable;
 import br.edu.ufrn.foodium.framework.domain.service.RecommendationService;
+import br.edu.ufrn.foodium.service.recommendation.JaccardRecommendator;
+import br.edu.ufrn.foodium.service.recommendation.Tuple;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public class HotelRecommendationService extends RecommendationService<Hotel> {
         return sortedPostList;
     }
 
-    private double calculateDistance(User user, Hotel hotel) {
+    public static double calculateDistance(User user, Hotel hotel) {
         double rlat1 = (user.getLocLatitude() * Math.PI)/180;
         double rlon1 = (user.getLocLongitude() * Math.PI)/180;
         double rlat2 = (hotel.getLocLatitude() * Math.PI)/180;
